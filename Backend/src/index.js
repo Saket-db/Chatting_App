@@ -1,8 +1,8 @@
-// const express = require("express")
+
 import express from "express";
 import authRouter from "./routes/auth.route.js";
 import dotenv from "dotenv";
-// import authController from "./controllers/auth.controller.js";
+
 import { connectDB } from "./lib/db.js";
 
 dotenv.config()
