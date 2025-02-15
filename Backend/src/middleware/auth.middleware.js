@@ -15,7 +15,7 @@ export const protectRoute = async (req, res, next) => {
             return res.status(401).json({message: "Unauthorized - Invalid Token"});
         }
 
-        if(!user)
+        if(!User)
             {
                 return res.status(401).json({message: "User not found"});
             }
