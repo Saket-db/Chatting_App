@@ -4,16 +4,23 @@ import SignUpPage from './pages/SignUpPage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 import ProfilePage from './pages/ProfilePage.jsx';
 import SettingsPage from './pages/SettingsPage.jsx';
+import { useEffect } from 'react';
 
 import {Routes, Route} from 'react-router-dom';
-import { authUser } from './store/useAuthStore.js';
-
+// import { authUser } from './store/useAuthStore.js';
+import { useAuthStore } from "./store/useAuthStore";
 const App = () => {
 
-  const {authUser} = useAuthStore()
+  const {authUser, checkAuth} = useAuthStore();
+
+  useEffect (() => {
+    checkAuth();
+  }, [checkAuth]);
+
+console.log({authUser});
 
   return (
-    <div >
+    <div>
 
       <Navbar />
 
