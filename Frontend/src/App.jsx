@@ -1,8 +1,17 @@
-import Navbar from './components/Navbar';
+import Navbar from './components/Navbar.jsx';
+import HomePage from './pages/HomePage.jsx';
+import SignUpPage from './pages/SignUpPage.jsx';
+import LoginPage from './pages/LoginPage.jsx';
+import ProfilePage from './pages/ProfilePage.jsx';
+import SettingsPage from './pages/SettingsPage.jsx';
 
 import {Routes, Route} from 'react-router-dom';
+import { authUser } from './store/useAuthStore.js';
 
 const App = () => {
+
+  const {authUser} = useAuthStore()
+
   return (
     <div >
 
@@ -19,7 +28,7 @@ const App = () => {
       </Routes>
 
     </div>
-  )
-}
+  );
+};
 
 export default App;
