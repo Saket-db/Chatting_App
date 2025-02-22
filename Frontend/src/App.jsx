@@ -8,7 +8,6 @@ import { useEffect } from 'react';
 import {Loader} from "lucide-react";
 
 import {Routes, Route, Navigate} from 'react-router-dom';
-// import { authUser } from './store/useAuthStore.js';
 import { useAuthStore } from "./store/useAuthStore";
 const App = () => {
 
@@ -21,7 +20,6 @@ const App = () => {
 if (isCheckingAuth && !authUser)
   return (
     <div className="flex items-center justify-center h-screen">
-      {/* {console.log("hi")} */}
       <Loader className="size-10 animate-spin" />
     </div>
   );
