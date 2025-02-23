@@ -25,7 +25,14 @@ export const useAuthStore = create((set) => ({
         }
     },
     
-    // signup: async (data) => {
-
-    // }
+    signup: async (data) => {
+        set({ isSigningUp: true });
+        try {
+          const res = await axiosInstance.post("/auth/signup", data);
+          set({ authUser: res.data });
+        }
+        finally {
+            set({ isSigningUp: false });
+          }
+    },
 }));
