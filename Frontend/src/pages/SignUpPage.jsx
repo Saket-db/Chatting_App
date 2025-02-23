@@ -1,13 +1,13 @@
 import React from "react";
 import { useAuthStore } from "../store/useAuthStore";
-import { MessageSquare } from "lucide-react";
+import { MessageSquare, User, Mail, Lock } from "lucide-react";
 
 const SignUpPage = () => {
   const [showPassword, setShowPassword] = React.useState(false);
   const [formData, setFormData] = React.useState({
     fullName: "",
-    password: "",
     email: "",
+    password: "",
   });
 
   const { signup, isSigningUp } = useAuthStore((state) => ({
@@ -22,7 +22,7 @@ const SignUpPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     validateForm();
-    // Call signup function if needed
+    signup(formData);
   };
 
   return (
@@ -33,58 +33,76 @@ const SignUpPage = () => {
           {/* LOGO */}
           <div className="text-center mb-8">
             <div className="flex flex-col items-center gap-2 group">
-              <div
-                className="size-12 rounded-xl bg-primary/10 flex items-center justify-center 
-               group-hover:bg-primary/20 transition-colors"
-              >
+              <div className="size-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
                 <MessageSquare className="size-6 text-primary" />
               </div>
               <h1 className="text-2xl font-bold mt-2">Create Account</h1>
-              <p className="text-base-content/60">
-                Get started with your free account
-              </p>
+              <p className="text-base-content/60">Get started with your free account</p>
             </div>
           </div>
 
-          {/* Signup Form
+          {/* Signup Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
-            <input
-              type="text"
-              placeholder="Full Name"
-              value={formData.fullName}
-              onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-              className="input input-bordered w-full"
-              required
-            />
-            <input
-              type="email"
-              placeholder="Email"
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="input input-bordered w-full"
-              required
-            />
-            <div className="relative">
+            {/* Full Name Input */}
+            <div className="form-control relative">
+              <label className="label">
+                <span className="label-text font-medium">Full Name</span>
+              </label>
+              <User className="absolute left-3 top-10 size-5 text-gray-400" />
+              <input
+                type="text"
+                className="input input-bordered w-full pl-10"
+                placeholder="Full Name"
+                value={formData.fullName}
+                onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+                required
+              />
+            </div>
+
+            {/* Email Input */}
+            <div className="form-control relative">
+              <label className="label">
+                <span className="label-text font-medium">Email</span>
+              </label>
+              <Mail className="absolute left-3 top-10 size-5 text-gray-400" />
+              <input
+                type="email"
+                className="input input-bordered w-full pl-10"
+                placeholder="Email"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                required
+              />
+            </div>
+
+            {/* Password Input */}
+            <div className="form-control relative">
+              <label className="label">
+                <span className="label-text font-medium">Password</span>
+              </label>
+              <Lock className="absolute left-3 top-10 size-5 text-gray-400" />
               <input
                 type={showPassword ? "text" : "password"}
+                className="input input-bordered w-full pl-10"
                 placeholder="Password"
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                className="input input-bordered w-full"
                 required
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-3 flex items-center text-sm"
+                className="absolute right-3 top-10 text-sm text-gray-500"
               >
                 {showPassword ? "Hide" : "Show"}
               </button>
             </div>
+
+            {/* Submit Button */}
             <button type="submit" className="btn btn-primary w-full" disabled={isSigningUp}>
               {isSigningUp ? "Signing Up..." : "Sign Up"}
             </button>
-          </form> */}
+          </form>
         </div>
       </div>
     </div>
