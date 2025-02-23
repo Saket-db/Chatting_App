@@ -10,14 +10,15 @@ export const useAuthStore = create((set) => ({
     isCheckingAuth: true,
 //Function is always async  
     checkAuth: async() => {
+        console.log('hjk')
         try{
-            const res = await axiosInstance.get("/auth/check");
+            const res = await axiosInstance.get("auth/check");
             
             set(({authUser: res.data}));
         }
         catch(error)
         {
-            console.log("Error in checkAuth:", error);
+            console.log("Error in checkAuth:", error);  
             set({authUser: null});
         }
         finally {

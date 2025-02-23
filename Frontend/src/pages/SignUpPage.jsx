@@ -10,10 +10,9 @@ const SignUpPage = () => {
     password: "",
   });
 
-  const { signup, isSigningUp } = useAuthStore((state) => ({
-    signup: state.signup,
-    isSigningUp: state.isSigningUp,
-  }));
+  const signup = useAuthStore((state) => state.signup);
+  const isSigningUp = useAuthStore((state) => state.isSigningUp);
+
 
   const validateForm = () => {
     // Add validation logic here
@@ -28,6 +27,7 @@ const SignUpPage = () => {
   return (
     <div className="min-h-screen grid lg:grid-cols-2">
       {/* Left side */}
+      {console.log('jjjjjj')}
       <div className="flex flex-col justify-center items-center p-6 sm:p-12">
         <div className="w-full max-w-md space-y-8">
           {/* LOGO */}
