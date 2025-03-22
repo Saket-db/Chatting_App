@@ -9,7 +9,7 @@ import cloudinary from "../lib/cloudinary.js";
  * @access Public
  */
 export const signup = async (req, res) => {
-    const { fullName, email, password } = req.body;
+    const { fullName, email, password } = await req.body;
     console.log(fullName,  email, password);
     try {
         
@@ -130,7 +130,7 @@ export const updateProfile = async (req, res) =>{
     }
 };
 
-export const check = (req,res) => {
+export const check = async (req,res) => {
     console.log('hello');
     try {
         res.status(200).json(req.user);

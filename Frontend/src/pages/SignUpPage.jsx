@@ -2,6 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
 import { MessageSquare, User, Mail, Lock, Eye, EyeOff, Loader2 } from "lucide-react";
+import toast from "react-hot-toast";
+import AuthImagePattern from "../components/AuthImagePattern";
 
 const SignUpPage = () => {
   const [showPassword, setShowPassword] = React.useState(false);
@@ -15,17 +17,25 @@ const SignUpPage = () => {
   const isSigningUp = useAuthStore((state) => state.isSigningUp);
 
   const validateForm = () => {
-    // Add validation logic here
+    if (!formData.fullName.trim()) return toast.error("Full name is required");
+    if (!formData.email.trim()) return toast.error("Email is required");
+    if (!/\S+@\S+\.\S+/.test(formData.email)) return toast.error("Invalid email format");
+    if (!formData.password) return toast.error("Password is required");
+    if (formData.password.length < 6) return toast.error("Password must be at least 6 characters");
+
+    return true;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    validateForm();
-    signup(formData);
+    const success = validateForm();
+
+    if(success===true) signup(formData);
   };  
 
+
   return (
-    <div className="min-h-screen grid lg:grid-cols-1">
+    <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2">
       {/* Left side */}
       <div className="flex flex-col justify-center items-center p-6 sm:p-12">
         <div className="w-full max-w-md space-y-8">
@@ -96,6 +106,7 @@ const SignUpPage = () => {
                 {showPassword ? <EyeOff className="size-6 text-base-content/40" /> : <Eye className="size-6 text-base-content/40" />}
               </button>
             </div>
+            {/* </div> */}
 
             {/* Submit Button */}
             <button type="submit" className="btn btn-primary w-full" disabled={isSigningUp}>
@@ -119,6 +130,13 @@ const SignUpPage = () => {
           </div>
         </div>
       </div>
+
+      {/* Right side */}
+ 
+      <AuthImagePattern
+      title="Join Chatify"
+      subtitle = "Connect with friends, stay in touch with your loved ones!"/>
+
     </div>
   );
 };
