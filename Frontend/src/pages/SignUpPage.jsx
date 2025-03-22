@@ -1,6 +1,7 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
-import { MessageSquare, User, Mail, Lock } from "lucide-react";
+import { MessageSquare, User, Mail, Lock, Eye, EyeOff, Loader2 } from "lucide-react";
 
 const SignUpPage = () => {
   const [showPassword, setShowPassword] = React.useState(false);
@@ -13,7 +14,6 @@ const SignUpPage = () => {
   const signup = useAuthStore((state) => state.signup);
   const isSigningUp = useAuthStore((state) => state.isSigningUp);
 
-
   const validateForm = () => {
     // Add validation logic here
   };
@@ -22,12 +22,11 @@ const SignUpPage = () => {
     e.preventDefault();
     validateForm();
     signup(formData);
-  };
+  };  
 
   return (
-    <div className="min-h-screen grid lg:grid-cols-2">
+    <div className="min-h-screen grid lg:grid-cols-1">
       {/* Left side */}
-      {console.log('jjjjjj')}
       <div className="flex flex-col justify-center items-center p-6 sm:p-12">
         <div className="w-full max-w-md space-y-8">
           {/* LOGO */}
@@ -84,7 +83,7 @@ const SignUpPage = () => {
               <input
                 type={showPassword ? "text" : "password"}
                 className="input input-bordered w-full pl-10"
-                placeholder="Password"
+                placeholder="********"
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 required
@@ -94,15 +93,30 @@ const SignUpPage = () => {
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3 top-10 text-sm text-gray-500"
               >
-                {showPassword ? "Hide" : "Show"}
+                {showPassword ? <EyeOff className="size-6 text-base-content/40" /> : <Eye className="size-6 text-base-content/40" />}
               </button>
             </div>
 
             {/* Submit Button */}
             <button type="submit" className="btn btn-primary w-full" disabled={isSigningUp}>
-              {isSigningUp ? "Signing Up..." : "Sign Up"}
+              {isSigningUp ? (
+                <>
+                  <Loader2 className="size-6 animate-spin" /> Loading...
+                </>
+              ) : (
+                "Create Account"
+              )}
             </button>
           </form>
+
+          <div className="text-center">
+            <p className="text-base-content/60">
+              Already have an account?{" "}
+              <Link to="/login" className="link link-primary">
+                Sign In
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
     </div>
