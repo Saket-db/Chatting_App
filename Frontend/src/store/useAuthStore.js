@@ -16,34 +16,42 @@ export const useAuthStore = create((set) => ({
         try{
             const res = await axiosInstance.get("/auth/check");
             
-            set(({authUser: res.data}));
+            set((state) => ({ authUser: res.data }));
             console.log('klara',authUser);
             console.log('itsme',res.status);
         }
         catch(error)
         {
-            console.log("Error in checkAuth:", error);  
-            set({authUser: null});
+            console.log("Error in checkAuth:", error?.response?.data || error.message); 
+            set(() => ({ authUser: null }));
         }
         finally {
-            set({ isCheckingAuth: false});
+            set(() => ({ isCheckingAuth: false }));
         }
     },
     
     signup: async (data) => {
-        console.log('karan',data)
+        console.log("Signup Data:", data);
         set({ isSigningUp: true });
+    
         try {
-          const res = await axiosInstance.post("/auth/signup", data);
-          set({ authUser: res.data });
-          console.log("hello woerld",authUser)
-          toast.success("Account created successfully");
-        //   get().connectSocket();
-        } catch (error) {
-        console.log("Error in signup:");
-          toast.error(error.response.data.message);
-        } finally {
-          set({ isSigningUp: false });
-          }
+            const res = await axiosInstance.post("/auth/signup", data);
+    
+            console.log("Signup Response:", res.data); // ✅ Log API response
+    
+            // Ensure `authUser` is correctly set in the store
+            set(() => ({ authUser: res.data }));
+    
+            toast.success("Account created successfully"); // ✅ Success message
+        } 
+        catch (error) {
+            console.error("Error in signup:", error?.response?.data || error.message);
+    
+            toast.error(error?.response?.data?.message || "Signup failed");
+        } 
+        finally {
+            set(() => ({ isSigningUp: false }));
+        }
     },
+    
 }));
