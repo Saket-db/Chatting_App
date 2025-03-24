@@ -112,7 +112,7 @@ export const logout = (req, res) => {
 export const updateProfile = async (req, res) =>{
     try {
         const { profilePic } = req.body;
-        const usser = req.user._id
+        const user = req.user._id
 
         if(!profilePic)
         {
@@ -130,14 +130,12 @@ export const updateProfile = async (req, res) =>{
     }
 };
 
-export const check = async (req,res) => {
-    console.log('hello');
+
+export const checkAuth = (req, res) => {
     try {
-        res.status(200).json(req.user);
-      } 
-      catch (error)
-      {
-        console.log("Error in checkAuth controller", error.message);
-        return res.status(500).json({ message: "Internal Server Error" });
-      }
+      res.status(200).json(req.user);
+    } catch (error) {
+      console.log("Error in checkAuth controller", error.message);
+      res.status(500).json({ message: "Internal Server Error" });
+    }
 };
