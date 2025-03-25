@@ -109,24 +109,42 @@ export const logout = (req, res) => {
 };
 
 
-export const updateProfile = async (req, res) =>{
+export const updateProfile = async (req, res) => {
     try {
         const { profilePic } = req.body;
-        const user = req.user._id
+        const userId = req.user?._id; // Fix: Ensure this is correctly extracted
 
-        if(!profilePic)
-        {
+        if (!userId) {
+            return res.status(401).json({ message: "Unauthorized - User not found" });
+        }
+
+        if (!profilePic) {
             return res.status(400).json({ message: "Please add a profile picture" });
         }
 
-        const uploadResponse = await cloudinary.uploader.upload(profilePic)
-        const updatedUser = await User.findByIdAndUpdate(userId, {profilePic:uploadResponse.secure_url}, {new:true})
-        res.status(200).json(updatedUser)
-    }
-    catch(error){
-        console.log("error in update profile:", error);
-        res.status(500).json({ message: "Server error" });
+        console.log("Uploading image to Cloudinary...");
+        const uploadResponse = await cloudinary.uploader.upload(profilePic);
+        console.log("Cloudinary Upload Response:", uploadResponse);
 
+        if (!uploadResponse.secure_url) {
+            return res.status(500).json({ message: "Failed to upload image" });
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            { profilePic: uploadResponse.secure_url },
+            { new: true }
+        );
+
+        if (!updatedUser) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        console.log("Updated User:", updatedUser);
+        res.status(200).json(updatedUser);
+    } catch (error) {
+        console.error("Error in update profile:", error);
+        res.status(500).json({ message: "Server error", error: error.message });
     }
 };
 
