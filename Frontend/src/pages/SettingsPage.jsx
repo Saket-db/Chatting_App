@@ -3,6 +3,7 @@ import { useThemeStore } from "../store/useThemeStore";
 import { Send } from "lucide-react";
 import { motion } from "framer-motion";
 
+
 const PREVIEW_MESSAGES = [
   { id: 1, content: "Hey! How's it going?", isSent: false },
   { id: 2, content: "I'm doing great!", isSent: true },
