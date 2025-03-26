@@ -21,7 +21,7 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="h-screen pt-20">
+    <div className="min-h-screen pt-20">
       <div className="max-w-2xl mx-auto p-6">
         <motion.div
           initial={{ opacity: 0, y: 10 }}

@@ -13,7 +13,7 @@ const SettingsPage = () => {
   const { theme, setTheme } = useThemeStore();
 
   return (
-    <div className="h-screen container mx-auto px-4 pt-20 max-w-4xl">
+    <div className="min-h-screen container mx-auto px-4 pt-20 max-w-4xl">
       <div className="space-y-8">
         {/* Theme Selection */}
         <div className="flex flex-col gap-1">
@@ -35,7 +35,7 @@ const SettingsPage = () => {
               `}
               onClick={() => setTheme(t)}
             >
-              <div className="relative h-10 w-full rounded-md overflow-hidden" data-theme={t}>
+              <div className="relative h-8 w-full rounded-md overflow-hidden" data-theme={t}>
                 <div className="absolute inset-0 grid grid-cols-4 gap-px p-1">
                   <div className="rounded bg-primary"></div>
                   <div className="rounded bg-secondary"></div>
