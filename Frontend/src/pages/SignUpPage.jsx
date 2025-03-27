@@ -39,7 +39,7 @@ const SignUpPage = () => {
           <div className="text-center mb-6">
             <div className="flex flex-col items-center gap-2 group">
               <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-all shadow-md">
-                <MessageSquare className="w-7 h-7 text-primary" />
+                <MessageSquare className="w-7 h-7 text-primary animate-bounce" />
               </div>
               <h1 className="text-3xl font-bold mt-2">Create Account</h1>
               <p className="text-base-content/60">Get started with your free account</p>

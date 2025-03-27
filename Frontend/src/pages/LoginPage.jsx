@@ -3,6 +3,7 @@ import { useAuthStore } from "../store/useAuthStore";
 import AuthImagePattern from "../components/AuthImagePattern";
 import { Link } from "react-router-dom";
 import { Eye, EyeOff, Loader2, Lock, Mail, MessageSquare } from "lucide-react";
+// import { useThemeStore } from "./store/useThemeStore";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -26,7 +27,7 @@ const LoginPage = () => {
               <div
                 className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-all shadow-md"
               >
-                <MessageSquare className="w-7 h-7 text-primary" />
+                <MessageSquare className="w-7 h-7 text-primary animate-bounce" />
               </div>
               <h1 className="text-3xl font-bold mt-2">Welcome Back</h1>
               <p className="text-base-content/60">Sign in to your account</p>
@@ -88,7 +89,7 @@ const LoginPage = () => {
             >
               {isLoggingIn ? (
                 <>
-                  <Loader2 className="h-5 w-5 animate-spin" />
+                  <Loader2 data-theme={t} className="h-5 w-5 animate-spin " />
                   Loading...
                 </>
               ) : (
