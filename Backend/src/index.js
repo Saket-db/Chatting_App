@@ -1,7 +1,7 @@
 
 import express from "express";
 import authRouter from "./routes/auth.route.js";
-import messageRoutes from "./routes/message.route.js";
+import messageRoutes from "./routes/messages.route.js";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
@@ -21,7 +21,7 @@ app.use(cors({
 })); 
 
 app.use("/api/auth", authRouter);
-app.use("/api/message", messageRoutes);
+app.use("/api/messages", messageRoutes);
 
 app.listen(PORT, () => {
     console.log("Server is running on PORT:"+ PORT);
