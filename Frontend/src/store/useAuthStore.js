@@ -1,109 +1,89 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware"; // ✅ Add persist
 import { axiosInstance } from "../lib/axios.js";
 import toast from "react-hot-toast";
-import axios from "axios";
-// import { updateProfile } from "../../../Backend/src/controllers/auth.controller.js";
-// import { updateProfile } from "../../../Backend/src/controllers/auth.controller.js";
 
+export const useAuthStore = create(
+  persist(
+    (set, get) => ({
+      authUser: null,
+      isCheckingAuth: false,
+      isLoggingIn: false,
+      isUpdatingProfile: false,
+      onlineUsers: [],
 
-export const useAuthStore = create((set) => ({
-    authUser: null,
-    isCheckAuth: false,
-    isLoggingIng: false,
-    isUpdateProfile: false,
-    onlineUsers : [],
-    isCheckingAuth: true,
-//Function is always async  
-    checkAuth: async() => {
-        console.log('hjk')
-        try{
-            console.log("Hi");
-            const res = await axios.get("/auth/check");
-            set((state) => ({ authUser: res.data }));
-            console.log('klara',authUser);
-            console.log('itsme',res.status);
+      // ✅ Fix: Use axiosInstance to ensure auth headers are included
+      checkAuth: async () => {
+        set({ isCheckingAuth: true });
+        try {
+          const res = await axiosInstance.get("/auth/check");
+          console.log("Auth Check Response:", res.data);
+          set({ authUser: res.data }); // ✅ Fix: Use res.data instead of undefined authUser
+        } catch (error) {
+          console.error("Error in checkAuth:", error?.response?.data || error.message);
+          set({ authUser: null });
+        } finally {
+          set({ isCheckingAuth: false });
         }
-        catch(error)
-        {
-            console.log("Error in checkAuth:", error?.response?.data || error.message); 
-            set(() => ({ authUser: null }));
-        }
-        finally {
-            set(() => ({ isCheckingAuth: false }));
-        }
-    },
-    
-    signup: async (data) => {
-        console.log("Signup Data:", data);
+      },
+
+      signup: async (data) => {
         set({ isSigningUp: true });
-    
         try {
-            const res = await axiosInstance.post("/auth/signup", data);
-    
-            console.log("Signup Response:", res.data); 
-    
-            
-            set(() => ({ authUser: res.data }));
-    
-            toast.success("Account created successfully"); 
-        } 
-        catch (error) {
-            console.error("Error in signup:", error?.response?.data || error.message);
-    
-            toast.error(error?.response?.data?.message || "Signup failed");
-        } 
-        finally {
-            set(() => ({ isSigningUp: false }));
+          const res = await axiosInstance.post("/auth/signup", data);
+          console.log("Signup Response:", res.data);
+          set({ authUser: res.data });
+          toast.success("Account created successfully");
+        } catch (error) {
+          console.error("Error in signup:", error?.response?.data || error.message);
+          toast.error(error?.response?.data?.message || "Signup failed");
+        } finally {
+          set({ isSigningUp: false });
         }
-    },
+      },
 
-    logout: async () => {
-
-        console.log("Logout");
-        try{
-            await axiosInstance.post("/auth/logout");
-            set({authUser:null});
-            toast.success("Logged out successfully");
-        }
-        catch(error)
-        {
-            toast.error(error.response.data.message);
-        }
-    },
-    
-    login: async (data) => {  // <-- Accept data as a parameter
-        console.log("Login", data);
+      login: async (data) => {
         set({ isLoggingIn: true });
-    
         try {
-            const res = await axiosInstance.post("/auth/login", data);
-            set({ authUser: res.data });
-            toast.success("Logged in successfully");
+          const res = await axiosInstance.post("/auth/login", data);
+          console.log("Login Response:", res.data);
+          set({ authUser: res.data });
+          toast.success("Logged in successfully");
+        } catch (error) {
+          console.error("Error in login:", error?.response?.data || error.message);
+          toast.error(error?.response?.data?.message || "Login failed");
+        } finally {
+          set({ isLoggingIn: false });
         }
-        catch (error) {
-            console.error("Error in login:", error?.response?.data || error.message);
-            toast.error(error?.response?.data?.message || "Login failed");
-        }
-        finally {
-            set({ isLoggingIn: false });
-        }
-    },
+      },
 
+      logout: async () => {
+        try {
+          await axiosInstance.post("/auth/logout");
+          set({ authUser: null });
+          toast.success("Logged out successfully");
+        } catch (error) {
+          toast.error(error?.response?.data?.message || "Logout failed");
+        }
+      },
 
-    UpdateProfile: async(data) => {
+      UpdateProfile: async (data) => {
         set({ isUpdatingProfile: true });
-        try{
-            console.log("Helo");
-            const res = await axiosInstance.put("/auth/update-profile",data);
-            set({ authUser: res.data });
-            toast.success("Profile updated successfully");
+        try {
+          const res = await axiosInstance.put("/auth/update-profile", data);
+          set({ authUser: res.data });
+          toast.success("Profile updated successfully");
+        } catch (error) {
+          console.error("Error in updateProfile:", error?.response?.data || error.message);
+          toast.error(error?.response?.data?.message || "Profile update failed");
+        } finally {
+          set({ isUpdatingProfile: false });
         }
-        catch(error){
-            console.log("Error: ", error);
-            toast.error(error.response.data.message);   
-        }
-        finally{
-            set({isUpdatingProfile:false});
-        }
+      }
+    }),
+    {
+      name: "auth-storage", // ✅ Store auth state in localStorage
+      getStorage: () => localStorage,
     }
-}));
+  )
+);
