@@ -10,7 +10,7 @@ const ProfilePage = () => {
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-
+//  console.log("Updated");
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = async () => {
