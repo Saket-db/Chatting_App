@@ -31,7 +31,10 @@ export const useAuthStore = create(
         set({ isSigningUp: true });
         try {
           const res = await axiosInstance.post("/auth/signup", data);
-          console.log("Signup Response:", res.data);
+      
+          // ✅ Store token after signup
+          localStorage.setItem("authToken", res.data.token);
+      
           set({ authUser: res.data });
           toast.success("Account created successfully");
         } catch (error) {
@@ -46,7 +49,10 @@ export const useAuthStore = create(
         set({ isLoggingIn: true });
         try {
           const res = await axiosInstance.post("/auth/login", data);
-          console.log("Login Response:", res.data);
+          
+          // ✅ Store token in localStorage
+          localStorage.setItem("authToken", res.data.token);
+      
           set({ authUser: res.data });
           toast.success("Logged in successfully");
         } catch (error) {
