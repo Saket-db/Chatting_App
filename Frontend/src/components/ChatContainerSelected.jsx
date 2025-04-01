@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useChatStore } from '../store/useChatStore'
 import ChatHeader from './ChatHeader'
+import MessageInput from './MessageInput'
 // import { useEffect } from 'react'
 
 const ChatContainerSelected = () => {
@@ -56,7 +57,7 @@ const ChatContainerSelected = () => {
       ))}
     </div>
 
-    {/* <MessageInput /> */}
+    <MessageInput />
   </div>
   )
 }
