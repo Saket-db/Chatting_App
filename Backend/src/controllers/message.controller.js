@@ -37,8 +37,9 @@ export  const getMessages = async(req,res) =>
 
 export  const sendMessages = async(req,res) => {
     try{
-        const {text,image} = req.body;
-        const {id: recieverId } = req.params;
+        const {text,image} = await req.body;
+        const {id } = await req.params;
+        const receiverId = id;
 
         const senderId = req.user._id;
 
@@ -50,10 +51,12 @@ export  const sendMessages = async(req,res) => {
 
         const newMessage = new Message({
             senderId,
-            recieverId,
+            receiverId,
             text,
             image: imageUrl,
         }); 
+
+        console.log('newsss',newMessage)
 
         await newMessage.save();
 
