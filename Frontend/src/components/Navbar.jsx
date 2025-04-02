@@ -127,11 +127,11 @@ const Navbar = () => {
           >
             Logout
           </button>
-        </div>
+          </div>
+        </motion.div>
       </motion.div>
-    </motion.div>
-  )}
-</AnimatePresence>
+      )}
+    </AnimatePresence>
     </>
   );
 };
