@@ -1,6 +1,7 @@
 import { useEffect } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar.jsx";
+import Nav from "./components/Nav.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import SignUpPage from "./pages/SignUpPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
@@ -12,22 +13,27 @@ import { Loader } from "lucide-react";
 import { Toaster } from "react-hot-toast";
 
 const App = () => {
-  const { authUser, checkAuth, isCheckingAuth } = useAuthStore()
-  const {theme} = useThemeStore()
+  const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
+  const { theme } = useThemeStore();
+  const location = useLocation();
+
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
 
   if (isCheckingAuth && !authUser)
     return (
-      <div data-theme = {theme} className="flex items-center justify-center h-screen">
-        <Loader  className="size-10 animate-spin" />
+      <div data-theme={theme} className="flex items-center justify-center h-screen">
+        <Loader className="size-10 animate-spin" />
       </div>
     );
 
+  // Show Nav for login/signup pages, otherwise show Navbar
+  const isAuthPage = location.pathname === "/login" || location.pathname === "/signup";
+
   return (
-    <div data-theme = {theme} className="min-h-screen">
-      <Navbar />
+    <div data-theme={theme} className="min-h-screen">
+      {isAuthPage ? <Nav /> : <Navbar />}
       <Routes>
         <Route path="/" element={authUser ? <HomePage /> : <Navigate to="/login" />} />
         <Route path="/signup" element={!authUser ? <SignUpPage /> : <Navigate to="/" />} />
