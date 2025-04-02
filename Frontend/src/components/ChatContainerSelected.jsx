@@ -1,16 +1,37 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useChatStore } from '../store/useChatStore'
+import { useAuthStore } from "../store/useAuthStore";
+// import {useFormatTime} from "react-intl-hooks",
 import ChatHeader from './ChatHeader'
 import MessageInput from './MessageInput'
+// import { MessageTimeStamp } from "stream-chat-react"
 // import { useEffect } from 'react'
 
 const ChatContainerSelected = () => {
-
+  const messageEndRef = useRef(null);
   const{messages, getMessages, isMessageLoading, selectedUser} = useChatStore()
+  const {authUser} = useAuthStore();
+
+  const formatMessageTime = (timestamp) => {
+    if (!timestamp) return "Unknown time";
+    
+    return new Intl.DateTimeFormat("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true, // Displays AM/PM format
+    }).format(new Date(timestamp));
+  };
+  
 
   useEffect(() =>{
     getMessages(selectedUser._id)
   },[selectedUser._id, getMessages])
+
+  useEffect(() => {
+    if (messageEndRef.current) {
+      messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
 
   if(isMessageLoading) return
   <div>Loading..</div>
@@ -23,7 +44,7 @@ const ChatContainerSelected = () => {
       {messages.map((message) => (
         <div
           key={message._id}
-          className={`chat ${message.senderId === authUser._id ? "chat-end" : "chat-start"}`}
+          className={`chat ${message.senderId === authUser?._id ? "chat-end" : "chat-start"}`}
           ref={messageEndRef}
         >
           <div className=" chat-image avatar">
@@ -31,7 +52,7 @@ const ChatContainerSelected = () => {
               <img
                 src={
                   message.senderId === authUser._id
-                    ? authUser.profilePic || "https://res.cloudinary.com/dyy1u7wvc/image/upload/v1742831930/skyswnfq1cpwysmf7slp.png"
+                    ? authUser?.profilePic || "https://res.cloudinary.com/dyy1u7wvc/image/upload/v1742831930/skyswnfq1cpwysmf7slp.png"
                     : selectedUser.profilePic || "https://res.cloudinary.com/dyy1u7wvc/image/upload/v1742831930/skyswnfq1cpwysmf7slp.png"
                 }
                 alt="profile pic"
@@ -55,6 +76,7 @@ const ChatContainerSelected = () => {
           </div>
         </div>
       ))}
+      <div ref={messageEndRef}></div>
     </div>
 
     <MessageInput />
