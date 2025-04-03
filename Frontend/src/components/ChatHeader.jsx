@@ -1,4 +1,4 @@
-import { X } from "lucide-react";
+import { Trash2, X } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
 import { useChatStore } from "../store/useChatStore";
 import { motion, AnimatePresence } from "framer-motion";
@@ -62,18 +62,20 @@ const ChatHeader = () => {
         </div>
 
         {/* Delete Button */}
-        <button
-          className="absolute right-14 p-1 rounded-xl hover:bg-base-300 transition-colors"
-          onClick={handleDelete} // Handle deleting messages
-        >
-          Delete
-        </button>
+        {/* <div> */}
+    {/* Trash Bin Button (Delete Messages) */}
+    <button
+      className="absolute right-14 p-1 rounded-xl hover:bg-base-300 transition-colors"
+      onClick={handleDelete}
+    >
+      <Trash2 className="w-5 h-5" /> {/* Trash Icon */}
+    </button>
 
-        {/* Close button */}
-        <button onClick={() => setSelectedUser(null)}>
-          <X />
-        </button>
-      </div>
+    {/* Close Button (Unselect User) */}
+    <button onClick={() => setSelectedUser(null)}>
+      <X />
+    </button>
+  </div>
 
       {/* Profile Popup */}
       <AnimatePresence>
