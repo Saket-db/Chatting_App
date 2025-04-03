@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import toast from "react-hot-toast";
 import { axiosInstance } from "../lib/axios";
-//import { useAuthStore } from "./useAuthStore";
+import { useAuthStore } from "./useAuthStore";
 
 export const useChatStore = create((set, get) => ({
   messages: {}, // Store messages by user ID
@@ -74,15 +74,20 @@ export const useChatStore = create((set, get) => ({
   },
 
   setSelectedUser: (selectedUser) => {
-    if (!selectedUser) return;
+    if (!selectedUser) {
+      set({ selectedUser: null, messages: {} }); // ✅ Clear selected user and messages
+      return;
+    }
+  
     set({ selectedUser });
-
+  
     // Ensure we reset messages if not fetched
     if (!get().messages[selectedUser._id]) {
       set((state) => ({ messages: { ...state.messages, [selectedUser._id]: [] } }));
       get().getMessages(selectedUser._id);
     }
   },
+  
 
   clearMessages: () => {
     set({ messages: {} });
