@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, useRef, useEffect } from "react";
 
 const ChatHeader = () => {
-  const { selectedUser, setSelectedUser } = useChatStore();
+  const { selectedUser, clearMessages } = useChatStore();
   const { onlineUsers } = useAuthStore();
   const [showProfile, setShowProfile] = useState(false);
   const profileRef = useRef(null);
@@ -26,6 +26,11 @@ const ChatHeader = () => {
     };
   }, [showProfile]);
 
+  // Delete chat messages (clear messages but keep the user selected)
+  const handleDelete = () => {
+    clearMessages();  // Clear only the chat messages
+  };
+
   return (
     <div className="p-2.5 border-b border-base-300 relative">
       <div className="flex items-center justify-between">
@@ -35,10 +40,10 @@ const ChatHeader = () => {
             <div className="size-10 rounded-full relative">
               <img
                 src={
-                  selectedUser.profilePic ||
+                  selectedUser?.profilePic ||
                   "https://res.cloudinary.com/dyy1u7wvc/image/upload/v1742831930/skyswnfq1cpwysmf7slp.png"
                 }
-                alt={selectedUser.fullName}
+                alt={selectedUser?.fullName}
               />
             </div>
           </div>
@@ -48,20 +53,29 @@ const ChatHeader = () => {
               className="font-medium cursor-pointer hover:underline"
               onClick={() => setShowProfile(!showProfile)}
             >
-              {selectedUser.fullName}
+              {selectedUser?.fullName}
             </h3>
             <p className="text-sm text-base-content/70">
-              {onlineUsers.includes(selectedUser._id) ? "Online" : "Offline"}
+              {onlineUsers.includes(selectedUser?._id) ? "Online" : "Offline"}
             </p>
           </div>
         </div>
+
+        {/* Delete Button */}
+        <button
+          className="absolute right-14 p-1 rounded-xl hover:bg-base-300 transition-colors"
+          onClick={handleDelete} // Handle deleting messages
+        >
+          Delete
+        </button>
+
         {/* Close button */}
         <button onClick={() => setSelectedUser(null)}>
           <X />
         </button>
       </div>
 
-      {/* Profile Popup - now positioned within the chat container */}
+      {/* Profile Popup */}
       <AnimatePresence>
         {showProfile && (
           <motion.div
@@ -82,14 +96,14 @@ const ChatHeader = () => {
             <div className="flex flex-col items-center pt-4">
               <img
                 src={
-                  selectedUser.profilePic ||
+                  selectedUser?.profilePic ||
                   "https://res.cloudinary.com/dyy1u7wvc/image/upload/v1742831930/skyswnfq1cpwysmf7slp.png"
                 }
-                alt={selectedUser.fullName}
+                alt={selectedUser?.fullName}
                 className="w-16 h-16 rounded-full border mb-3"
               />
-              <h3 className="font-medium text-center">{selectedUser.fullName}</h3>
-              <p className="text-xs text-base-content/70 text-center mt-1">{selectedUser.email}</p>
+              <h3 className="font-medium text-center">{selectedUser?.fullName}</h3>
+              <p className="text-xs text-base-content/70 text-center mt-1">{selectedUser?.email}</p>
             </div>
           </motion.div>
         )}

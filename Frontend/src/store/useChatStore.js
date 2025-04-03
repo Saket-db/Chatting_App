@@ -94,4 +94,8 @@ export const useChatStore = create((set, get) => ({
     set({ selectedUser, messages: [] }); // Reset messages when selecting a new user
     get().getMessages(selectedUser?._id); // Fetch messages for the selected user
   },
+
+  clearMessages: () => {
+    set({ messages: [] });
+  }
 }));
