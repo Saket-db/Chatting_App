@@ -5,7 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, useRef, useEffect } from "react";
 
 const ChatHeader = () => {
-  const { selectedUser, clearMessages } = useChatStore();
+  const { selectedUser, setSelectedUser, clearMessages } = useChatStore();
+
   const { onlineUsers } = useAuthStore();
   const [showProfile, setShowProfile] = useState(false);
   const profileRef = useRef(null);
@@ -72,9 +73,14 @@ const ChatHeader = () => {
     </button>
 
     {/* Close Button (Unselect User) */}
-    <button onClick={() => setSelectedUser(null)}>
-      <X />
-    </button>
+{/* Close Button (Unselect User) */}
+<button
+  className="absolute right-5 p-1 rounded-xl hover:bg-base-300 transition-colors"
+  onClick={() => setSelectedUser(null)}
+>
+  <X className="w-5 h-5" />
+</button>
+
   </div>
 
       {/* Profile Popup */}
