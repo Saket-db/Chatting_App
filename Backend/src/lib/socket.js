@@ -1,6 +1,7 @@
 import http from "http";
 import { Server } from "socket.io";
 import express from "express";
+// import socket from "../../../Frontend/src/socket";
 
 const app = express();
 const server = http.createServer(app);
@@ -11,6 +12,11 @@ const io = new Server(server, {
         credentials: true,
     },
 });
+
+export function getReceiverSocketId(userId) {
+    return userSocketMap[userId];
+}
+
 
 // To store the online users
 const userSocketMap = {}; // key -> UserId & value -> SocketId

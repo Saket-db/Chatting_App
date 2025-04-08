@@ -3,35 +3,44 @@ import { useChatStore } from '../store/useChatStore';
 import { useAuthStore } from "../store/useAuthStore";
 import ChatHeader from './ChatHeader';
 import MessageInput from './MessageInput';
-import { Loader2 } from 'lucide-react';
+import MessageSkeleton from './skeletons/MessageSkeleton';
 
 const ChatContainerSelected = () => {
   const messageEndRef = useRef(null);
-  const { messages, getMessages, isMessagesLoading, selectedUser } = useChatStore();
+  const {
+    messages,
+    getMessages,
+    isMessagesLoading,
+    selectedUser,
+    subscribeToMessages,
+    unsubscribeFromMessages,
+  } = useChatStore();
+
   const { authUser } = useAuthStore();
+  const userMessages = messages?.[selectedUser?._id] || [];
 
   useEffect(() => {
     if (selectedUser?._id) {
       getMessages(selectedUser._id);
+      subscribeToMessages();
+      return () => unsubscribeFromMessages();
     }
-  }, [selectedUser?._id, getMessages]);
+  }, [selectedUser?._id, getMessages, subscribeToMessages, unsubscribeFromMessages]);
 
   useEffect(() => {
-    if (messageEndRef.current) {
+    if (messageEndRef.current && userMessages.length > 0) {
       messageEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [messages]);
-
-  // Get messages for the selected user (ensure it's an array)
-  const userMessages = messages[selectedUser?._id] || [];
+  }, [userMessages]);
 
   if (isMessagesLoading) {
-    return(
-      <div className='flex flex-col items-center justify-center'>
-    <Loader2 className="h-10 w-10 animate-spin " />
-    </div>
-    )
-    
+    return (
+      <div className="flex-1 flex flex-col overflow-auto">
+        <ChatHeader />
+        <MessageSkeleton />
+        <MessageInput />
+      </div>
+    );
   }
 
   return (
