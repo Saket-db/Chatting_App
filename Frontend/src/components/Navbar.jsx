@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { io } from "socket.io-client";
 import toast from "react-hot-toast";
 
-const socket = io("http://localhost:5000", { withCredentials: true });
+const socket = io("http://localhost:5002", { withCredentials: true });
 
 const Navbar = () => {
   const { logout, authUser } = useAuthStore();

@@ -14,8 +14,10 @@ import { Toaster, toast } from "react-hot-toast";
 import socket from "./socket";
 
 const App = () => {
-  const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
+  const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuthStore();
   const { theme } = useThemeStore();
+  console.log({onlineUsers})
+
   const location = useLocation();
   const [notifications, setNotifications] = useState([]);
 
