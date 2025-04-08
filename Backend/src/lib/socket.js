@@ -18,7 +18,7 @@ const userSocketMap = {}; // key -> UserId & value -> SocketId
 io.on("connection", (socket) => { //io.on is used as a doorway for new users to enter
     console.log("User Connected", socket.id);
 
-    const userId = socket.handshake.auth.userId; // get the userId from the handshake data
+    const userId = socket.handshake.query.userId; // get the userId from the handshake data
     if(userId) userSocketMap[userId] = socket.id;
 
     // io.emit is used to send events to all the connected users clients
