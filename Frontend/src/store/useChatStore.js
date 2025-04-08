@@ -89,7 +89,22 @@ export const useChatStore = create((set, get) => ({
   },
   
 
-  clearMessages: () => {
-    set({ messages: {} });
-  },
+  clearMessages: async () => {
+  const selectedUser = get().selectedUser;
+  if (!selectedUser?._id) return;
+
+  try {
+    await axiosInstance.delete(`/messages/soft-delete/${selectedUser._id}`);
+    set((state) => {
+      const updatedMessages = { ...state.messages };
+      delete updatedMessages[selectedUser._id];
+      return { messages: updatedMessages };
+    });
+    toast.success("Messages cleared");
+  } catch (error) {
+    console.error("Failed to clear messages:", error);
+    toast.error("Failed to clear messages");
+  }
+},
+
 }));

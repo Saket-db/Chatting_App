@@ -23,7 +23,9 @@ export const getMessages = async (req, res) => {
         $or: [
           { senderId: senderId, receiverId: userToChatId },
           { senderId: userToChatId, receiverId: senderId }
-        ]
+        ],
+        deletedFor: {$ne: senderId}
+        
       }).sort({ createdAt: 1 }); // Sort messages in chronological order
   
       res.status(200).json(messages || []); // Ensure a response is always sent
@@ -34,19 +36,23 @@ export const getMessages = async (req, res) => {
   };
   
 
-export  const sendMessages = async(req,res) => {
+export const sendMessages = async(req,res) => {
     try{
-        const {text,image} = await req.body;
-        const {id } = await req.params;
+        const {text,image} =  req.body;
+        const {id } = req.params;
         const receiverId = id;
 
         const senderId = req.user._id;
 
         let imageUrl;
-        if(image){
-            const uploadResponse = await cloudinary.uploader.upload(image);
-            imageUrl = uploadResponse.secure_url;
-        }
+      // In message.controller.js
+if (image) {
+  const uploadedImage = await cloudinary.uploader.upload(image, {
+    folder: "chat_images",
+  });
+  imageUrl = uploadedImage.secure_url;
+}
+
 
         const newMessage = new Message({
             senderId,
@@ -66,4 +72,29 @@ export  const sendMessages = async(req,res) => {
         console.log("Error in sendMessage controller: ", error.message);
         res.status(500).json({error: "Internal server error"});
     }
+};
+
+export const softDeleteMessages = async (req, res) => {
+  try {
+    const { id: userToChatId } = req.params;
+    const senderId = req.user._id;
+
+    await Message.updateMany(
+      {
+        $or: [
+          { senderId: senderId, receiverId: userToChatId },
+          { senderId: userToChatId, receiverId: senderId }
+        ],
+        deletedFor: { $ne: senderId } // Only delete if not already deleted
+      },
+      {
+        $addToSet: { deletedFor: senderId } // Add user ID if not already in array
+      }
+    );
+
+    res.status(200).json({ message: "Messages deleted for you." });
+  } catch (error) {
+    console.error("Error in softDeleteMessages:", error.message);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 };

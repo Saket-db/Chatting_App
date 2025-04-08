@@ -35,7 +35,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 // ✅ Middleware
-app.use(express.json());
+app.use(express.json( {limit:"5mb"}));
 app.use(cookieParser());
 
 // ✅ Routes
