@@ -17,7 +17,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hot-toast": "^2.5.2",
-    "react-intl-hooks": "^1.0.11",
+    "react-intl": "^7.1.10",
     "react-router-dom": "^7.2.0",
     "socket.io-client": "^4.8.1",
     "stream-chat-react": "^12.13.1",
